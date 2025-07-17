@@ -1,0 +1,54 @@
+import pytest
+from playwright.sync_api import sync_playwright, Page, expect
+
+def launch_browser():
+    with sync_playwright() as p:
+        return p.chromium.launch(headless=False)  # ใช้ Chrome
+
+# Login with valid username and invalid password and invalid national-ID
+def test_login01_neg01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("65502100033-7")
+    page.locator('input[name="f_pwd"]').fill("5555")
+    page.locator('input[name="f_citizen"]').fill("5555")
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+ 
+    # ตรวจสอบข้อความแจ้งเตือน (Negative Case)
+    error_message = page.get_by_text("กรุณาป้อนรหัสประจำตัวและรหัสผ่านให้ถูกต้อง")
+    assert error_message.is_visible()
+    
+    # ตรวจสอบสีข้อความต้องเป็น "น้ำเงิน"
+    assert error_message.evaluate("el => getComputedStyle(el).color") == "rgb(0, 0, 255)"
+
+# Login with valid username, password, and national-ID (manual input)
+def test_login01_pos01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    # Wait For ข้อความว่า "เปลี่ยนรหัสผ่าน"
+    page.wait_for_selector(':has-text("เปลี่ยนรหัสผ่าน")', timeout=60000)
+    
+ 
+
+# Negative Test: Login with valid username, valid password, and invalid national-ID
+def test_login01_neg02(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("ValidUser")
+    page.locator('input[name="f_pwd"]').fill("ValidPass")
+    page.locator('input[name="f_citizen"]').fill("1234567890123")  # ใส่เลขบัตรประชาชนผิด
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+    
+    # ตรวจสอบว่ามีข้อความแจ้งเตือน
+    assert page.get_by_text("เลขประจำตัวประชาชนไม่ถูกต้อง").is_visible()
+
+# Logout Test Case
+def test_logout01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("ValidUser")
+    page.locator('input[name="f_pwd"]').fill("ValidPass")
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+    page.wait_for_url("**/main.asp**", timeout=5000)
+    
+    # คลิก Logout
+    page.get_by_text("ออกจากระบบ").click()
+    
+    # ตรวจสอบว่าถูก Redirect กลับมาที่หน้า Login
+    assert "login.asp" in page.url

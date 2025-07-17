@@ -1,0 +1,60 @@
+import pytest
+from playwright.sync_api import sync_playwright, Page, expect
+
+# ฟังก์ชันในการเปิดเบราว์เซอร์ Firefox
+def launch_browser_firefox():
+    with sync_playwright() as p:
+        return p.firefox.launch(headless=False)  # ใช้ Firefox แทน Chromium
+
+# Fixture สำหรับสร้าง page และ browser
+@pytest.fixture(scope="function")
+def page():
+    with sync_playwright() as p:
+        browser = p.firefox.launch(headless=False)
+        page = browser.new_page()
+        yield page
+        page.close()
+        browser.close()
+
+# Login with valid username and invalid password and invalid national-ID
+def test_login01_neg01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("65502100033-7")  # ใช้เลขบัตรประชาชน
+    page.locator('input[name="f_pwd"]').fill("5555")  # ใส่รหัสผ่านผิด
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+ 
+    # ตรวจสอบข้อความแจ้งเตือน (Negative Case)
+    error_message = page.locator("text=กรุณาป้อนรหัสประจำตัวและรหัสผ่านให้ถูกต้อง")
+    assert error_message.is_visible()
+
+# Login with valid username, password, and national-ID (manual input)
+def test_login01_pos01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    # Wait For ข้อความว่า "เปลี่ยนรหัสผ่าน"
+    page.wait_for_selector(':has-text("เปลี่ยนรหัสผ่าน")', timeout=60000)
+
+# Negative Test: Login with valid username, valid password, and invalid national-ID
+def test_login01_neg02(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("ValidUser")
+    page.locator('input[name="f_pwd"]').fill("ValidPass")
+    page.locator('input[name="f_citizen"]').fill("1234567890123")  # ใส่เลขบัตรประชาชนผิด
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+    
+    # ตรวจสอบว่ามีข้อความแจ้งเตือน
+    error_message = page.locator("text=เลขประจำตัวประชาชนไม่ถูกต้อง")
+    assert error_message.is_visible()
+
+# Logout Test Case
+def test_logout01(page: Page):
+    page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
+    page.locator('input[name="f_uid"]').fill("ValidUser")
+    page.locator('input[name="f_pwd"]').fill("ValidPass")
+    page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
+    page.wait_for_url("**/main.asp**", timeout=5000)
+    
+    # คลิก Logout
+    page.get_by_text("ออกจากระบบ").click()
+    
+    # ตรวจสอบว่าถูก Redirect กลับมาที่หน้า Login
+    assert "login.asp" in page.url
