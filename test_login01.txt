@@ -8,7 +8,7 @@ def launch_browser():
 # Login with valid username and invalid password and invalid national-ID
 def test_login01_neg01(page: Page):
     page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-    page.locator('input[name="f_uid"]').fill("65502100033-7")
+    page.locator('input[name="f_uid"]').fill("User_id")
     page.locator('input[name="f_pwd"]').fill("5555")
     page.locator('input[name="f_citizen"]').fill("5555")
     page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
@@ -51,4 +51,5 @@ def test_logout01(page: Page):
     page.get_by_text("ออกจากระบบ").click()
     
     # ตรวจสอบว่าถูก Redirect กลับมาที่หน้า Login
+
     assert "login.asp" in page.url
