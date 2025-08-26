@@ -104,7 +104,7 @@ def test_login01_neg01(page: Page):
     test_name = "test_login01_neg01"
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-        page.locator('input[name="f_uid"]').fill("65502100033-7") #ใส่รหัสนักศึกษาถูก
+        page.locator('input[name="f_uid"]').fill("User_id") #ใส่รหัสนักศึกษาถูก
         page.locator('input[name="f_pwd"]').fill("5555") #ใส่รหัสผ่านผิด
         page.locator('input[name="f_idcard"]').fill("5555")#ใส่เลขบัตรประชาชนผิด
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
@@ -151,8 +151,8 @@ def test_login01_neg03(page: Page):
     test_name = "test_login01_neg03"
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-        page.locator('input[name="f_uid"]').fill("65502100033-7")#ใส่รหัสนักศึกษาถูก
-        page.locator('input[name="f_pwd"]').fill("1102400149132")# ใส่รหัสผ่านถูก
+        page.locator('input[name="f_uid"]').fill("User_id")#ใส่รหัสนักศึกษาถูก
+        page.locator('input[name="f_pwd"]').fill("รหัสผ่านจริง")# ใส่รหัสผ่านถูก
         page.locator('input[name="f_idcard"]').fill("5555")  # ใส่เลขบัตรประชาชนผิด
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
 
@@ -172,8 +172,8 @@ def test_login01_neg04(page: Page):
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
         page.locator('input[name="f_uid"]').fill("5555")  # ใส่รหัสนักศึกษาผิด
-        page.locator('input[name="f_pwd"]').fill("1102400149132")  # ใส่รหัสผ่านถูก
-        page.locator('input[name="f_idcard"]').fill("1102400149132")  # ใส่เลขบัตรประชาชนถูก
+        page.locator('input[name="f_pwd"]').fill("รหัสผ่านจริง")  # ใส่รหัสผ่านถูก
+        page.locator('input[name="f_idcard"]').fill("บัตร ปชช")  # ใส่เลขบัตรประชาชนถูก
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
 
         error_message = page.wait_for_selector("text=กรุณาป้อนรหัสประจำตัวและรหัสผ่านให้ถูกต้อง",timeout=60000)
@@ -192,8 +192,8 @@ def test_login01_neg05(page: Page):
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
         page.locator('input[name="f_uid"]').fill("5555")  # ใส่รหัสนักศึกษาผิด
-        page.locator('input[name="f_pwd"]').fill("1102400149132")  # ใส่รหัสผ่านถูก
-        page.locator('input[name="f_idcard"]').fill("1102400149132")  # ใส่เลขบัตรประชาชนถูก
+        page.locator('input[name="f_pwd"]').fill("รหัสผ่านจริง")  # ใส่รหัสผ่านถูก
+        page.locator('input[name="f_idcard"]').fill("บชช")  # ใส่เลขบัตรประชาชนถูก
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
 
         error_message = page.wait_for_selector("text=กรุณาป้อนรหัสประจำตัวและรหัสผ่านให้ถูกต้อง",timeout=60000)
@@ -206,3 +206,4 @@ def test_login01_neg05(page: Page):
         screenshot = capture_screenshot(page, test_name)
         save_result_custom_row(test_name, "Fail", screenshot)
         raise
+
