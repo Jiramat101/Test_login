@@ -82,7 +82,7 @@ def test_login01_neg01(page: Page):
     test_name = "test_login01_neg01"
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-        page.locator('input[name="f_uid"]').fill("65502100033-7")
+        page.locator('input[name="f_uid"]').fill("User_id")
         page.locator('input[name="f_pwd"]').fill("5555")
         page.locator('input[name="f_idcard"]').fill("5555")
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
@@ -127,8 +127,8 @@ def test_login01_neg03(page: Page):
     test_name = "test_login01_neg03"
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-        page.locator('input[name="f_uid"]').fill("65502100033-7")
-        page.locator('input[name="f_pwd"]').fill("1102400149132")
+        page.locator('input[name="f_uid"]').fill("Usrt_id")
+        page.locator('input[name="f_pwd"]').fill("รหัสผ่านจริง")
         page.locator('input[name="f_idcard"]').fill("5555")  # ใส่เลขบัตรประชาชนผิด
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
 
@@ -147,8 +147,8 @@ def test_login01_neg04(page: Page):
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
         page.locator('input[name="f_uid"]').fill("5555")  # ใส่รหัสนักศึกษาผิด
-        page.locator('input[name="f_pwd"]').fill("1102400149132")  # ใส่รหัสผ่านถูก
-        page.locator('input[name="f_idcard"]').fill("1102400149132")  # ใส่เลขบัตรประชาชนถูก
+        page.locator('input[name="f_pwd"]').fill("รัสผ่านจริง")  # ใส่รหัสผ่านถูก
+        page.locator('input[name="f_idcard"]').fill("รหัส บปช")  # ใส่เลขบัตรประชาชนถูก
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
 
         error_message = page.wait_for_selector("text=กรุณาป้อนรหัสประจำตัวและรหัสผ่านให้ถูกต้อง",timeout=60000)
@@ -182,4 +182,5 @@ def save_result_custom_row(test_name, status, screenshot_path, row_number):
         ws.add_image(img, f"I{row_number}")
 
     # บันทึกไฟล์ Excel
+
     wb.save(filename)
