@@ -20,9 +20,7 @@ import pandas as pd
 # เข้า Developer Tool หาค่า Cookies ของ reg.rmutk.ac.th แล้วนำมาใส่ด้านล่าง
 # ระวัง! โดยทั่วไป ค่า Cookies ควรจะเป็นความลับ  คือไม่ควรแสดงสิ่งนี้ให้คนอื่นเห็น
 cookies = {
-    'ASPSESSIONIDACTQBAAC': 'CJGJENGAHFPAJIIHAANBFBPN', 
-    'ASPSESSIONIDCARSCDCA': 'BLHHNMGACHFCIOFBCODJIJMH',
-    'CKLANG': '0'
+    รหัสคุกกี้ f12
 }
 
 # เข้า Browser หน้าตรวจสอบจบ แล้วนำ URL มาใส่ด้านล่าง
@@ -65,3 +63,4 @@ for row in data:
     print(f"รหัสวิชา: {row[0]}, ชื่อวิชา: {row[1]}, หน่วยกิต: {row[2]}, เกรด: {row[3]}, เทอม: {row[4]}")
 
 # ------------------------------------------------------------- Task02 (ตัวอย่างการเก็บใน DataFrame)
+
