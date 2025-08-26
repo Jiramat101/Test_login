@@ -55,7 +55,7 @@ def test_login01_neg01(page: Page):
     test_name = "test_login01_neg01"
     try:
         page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-        page.locator('input[name="f_uid"]').fill("65502100033-7")
+        page.locator('input[name="f_uid"]').fill("User_id")
         page.locator('input[name="f_pwd"]').fill("5555")
         page.locator('input[name="f_idcard"]').fill("5555")
         page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
@@ -67,3 +67,4 @@ def test_login01_neg01(page: Page):
         screenshot = capture_screenshot(page, test_name)
         save_result(test_name, "Fail", screenshot)
         raise
+
