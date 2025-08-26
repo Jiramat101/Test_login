@@ -43,7 +43,7 @@ def page():
 def test_login_fail(page: Page):
     test_name = "test_login_fail"
     page.goto("https://reg.rmutk.ac.th/registrar/login.asp")
-    page.locator('input[name="f_uid"]').fill("65502100033-7")
+    page.locator('input[name="f_uid"]').fill("user_id")
     page.locator('input[name="f_pwd"]').fill("5555")
     page.locator('input[name="f_idcard"]').fill("5555")
     page.locator('input[type="submit"][value=" เข้าสู่ระบบ "]').click()
@@ -89,4 +89,5 @@ def test_login_success(page: Page):
 
     # อัปเดตสถานะลงใน Excel
     update_test_status(test_name, status, screenshot_path)
+
 '''
